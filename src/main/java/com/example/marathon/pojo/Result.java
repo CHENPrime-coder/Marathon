@@ -2,9 +2,11 @@ package com.example.marathon.pojo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class Result<T> {
 
     private Integer code; // 状态码
@@ -38,5 +40,9 @@ public class Result<T> {
      */
     public static <T> Result<T> error(Integer code, String message) {
         return new Result<>(code, message, null);
+    }
+
+    public static <T> Result<T> error(String message) {
+        return new Result<>(-1, message, null);
     }
 }

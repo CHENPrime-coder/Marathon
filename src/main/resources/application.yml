@@ -6,3 +6,9 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/Marathon
     username: root
     password: sa2025
+logging:
+  level:
+    com.example.marathon.mapper: debug
+mybatis:
+  mapper-locations: classpath:mappers/*.xml
+  type-aliases-package: com.example.marathon.table
