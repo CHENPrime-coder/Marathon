@@ -3,8 +3,7 @@ package com.example.marathon.table;
 import lombok.Data;
 
 @Data
-public class User {
-    private String email;
-    private String password;
+public class Role {
     private Integer roleId;
+    private String roleName;
 }
