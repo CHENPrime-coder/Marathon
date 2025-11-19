@@ -1,6 +1,6 @@
 package com.example.marathon.mapper;
 
-import com.example.marathon.table.City;
+import com.example.marathon.dao.City;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 

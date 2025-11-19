@@ -1,6 +1,6 @@
 package com.example.marathon.mapper;
 
-import com.example.marathon.table.RaceKitOption;
+import com.example.marathon.dao.RaceKitOption;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 

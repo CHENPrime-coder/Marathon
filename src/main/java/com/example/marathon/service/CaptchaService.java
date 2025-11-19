@@ -43,6 +43,7 @@ public class CaptchaService {
         String text = kaptcha.createText();
         BufferedImage image = kaptcha.createImage(text);
         String id = UUID.randomUUID().toString();
+        // 忽略大小写
         cache.put(id, text.toLowerCase());
         String base64 = encode(image);
         return new Captcha(id, base64, 120);

@@ -1,6 +1,6 @@
 package com.example.marathon.mapper;
 
-import com.example.marathon.table.Role;
+import com.example.marathon.dao.Role;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 

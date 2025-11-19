@@ -12,4 +12,7 @@ public class RaceResultResponse {
     private Integer completionTime;
     private Integer competitionId;
     private String runnerEmail;
+    private String runnerAvatar;
+    private String runnerCity;
+    private String runnerExperienceLevel;
 }

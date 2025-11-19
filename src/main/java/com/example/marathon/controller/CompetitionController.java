@@ -2,7 +2,7 @@ package com.example.marathon.controller;
 
 import com.example.marathon.api.ApiResponse;
 import com.example.marathon.service.CompetitionService;
-import com.example.marathon.table.Competition;
+import com.example.marathon.dao.Competition;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

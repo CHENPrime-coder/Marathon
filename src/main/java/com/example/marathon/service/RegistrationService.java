@@ -6,9 +6,9 @@ import com.example.marathon.exception.BizException;
 import com.example.marathon.mapper.CompetitionMapper;
 import com.example.marathon.mapper.RaceKitOptionMapper;
 import com.example.marathon.mapper.RegistrationMapper;
-import com.example.marathon.table.Competition;
-import com.example.marathon.table.RaceKitOption;
-import com.example.marathon.table.Registration;
+import com.example.marathon.dao.Competition;
+import com.example.marathon.dao.RaceKitOption;
+import com.example.marathon.dao.Registration;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

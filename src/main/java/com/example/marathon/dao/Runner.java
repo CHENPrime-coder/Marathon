@@ -1,4 +1,4 @@
-package com.example.marathon.table;
+package com.example.marathon.dao;
 
 import java.time.LocalDate;
 import com.example.marathon.pojo.Gender;

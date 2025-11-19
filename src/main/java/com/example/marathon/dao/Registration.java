@@ -1,4 +1,4 @@
-package com.example.marathon.table;
+package com.example.marathon.dao;
 
 import java.math.BigDecimal;
 import lombok.Data;

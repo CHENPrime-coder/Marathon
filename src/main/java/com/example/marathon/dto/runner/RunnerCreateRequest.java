@@ -22,4 +22,6 @@ public class RunnerCreateRequest {
     private String experience;
     @NotBlank
     private String password;
+    @NotBlank
+    private String photo;
 }

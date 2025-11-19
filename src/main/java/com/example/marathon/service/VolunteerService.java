@@ -1,10 +1,12 @@
 package com.example.marathon.service;
 
+import com.example.marathon.api.PageResponse;
+import com.example.marathon.dto.common.ImportResult;
 import com.example.marathon.dto.volunteer.VolunteerRequest;
 import com.example.marathon.mapper.CityMapper;
 import com.example.marathon.mapper.VolunteerMapper;
 import com.example.marathon.pojo.Gender;
-import com.example.marathon.table.Volunteer;
+import com.example.marathon.dao.Volunteer;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,21 +14,30 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-    @Service
-    public class VolunteerService {
-        private final VolunteerMapper mapper;
-        private final CityMapper cityMapper;
+@Service
+public class VolunteerService {
 
-        public VolunteerService(VolunteerMapper mapper, CityMapper cityMapper) {
-            this.mapper = mapper;
-            this.cityMapper = cityMapper;
+    private final VolunteerMapper mapper;
+    private final CityMapper cityMapper;
+
+    public VolunteerService(VolunteerMapper mapper, CityMapper cityMapper) {
+        this.mapper = mapper;
+        this.cityMapper = cityMapper;
+    }
+
+    public PageResponse<Volunteer> query(Integer cityId, String gender, String keyword,
+            int page, int size) {
+        if (page < 1) {
+            page = 1;
         }
-
-    public List<Volunteer> query(Integer cityId, String gender, String keyword) {
-        return mapper.query(cityId, gender, keyword);
+        long offset = (long) (page - 1) * size;
+        long total = mapper.count(cityId, gender, keyword);
+        List<Volunteer> list = mapper.query(cityId, gender, keyword, offset, size);
+        return new PageResponse<>(total, list);
     }
 
     @Transactional
@@ -36,30 +47,51 @@ import java.util.stream.Collectors;
         volunteer.setName(request.getName());
         volunteer.setCityId(request.getCityId());
         volunteer.setDateOfBirth(request.getDateOfBirth());
-        volunteer.setGender(Gender.valueOf(request.getGender()));
+        volunteer.setGender(Gender.valueOf(request.getGender().toUpperCase()));
         mapper.insert(volunteer);
         return volunteer;
     }
 
     @Transactional
-    public int importCsv(MultipartFile file) {
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
-            return reader.lines()
-                    .map(String::trim)
-                    .filter(line -> !line.isEmpty())
-                    .map(line -> line.split(","))
-                    .filter(parts -> parts.length >= 4)
-                    .map(parts -> {
-                        Volunteer v = new Volunteer();
-                        v.setName(parts[0].trim());
-                        v.setCityId(resolveCityId(parts[1].trim()));
-                        v.setDateOfBirth(java.time.LocalDate.parse(parts[2].trim()));
-                        v.setGender(Gender.valueOf(parts[3].trim()));
-                        return v;
-                    })
-                    .peek(mapper::insert)
-                    .collect(Collectors.toList())
-                    .size();
+    public ImportResult importCsv(MultipartFile file) {
+        int success = 0;
+        int fail = 0;
+        List<Integer> failedLines = new ArrayList<>();
+        List<Volunteer> volunteers = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
+            // skip header
+            reader.readLine();
+
+            String line;
+            int lineNum = 1; // Header is line 1, data starts at 2
+            while ((line = reader.readLine()) != null) {
+                lineNum++;
+                if (line.trim().isEmpty()) {
+                    continue;
+                }
+                try {
+                    String[] parts = line.split(",");
+                    if (parts.length < 4) {
+                        throw new IllegalArgumentException("Invalid format");
+                    }
+                    Volunteer v = new Volunteer();
+                    v.setName(parts[0].trim());
+                    v.setCityId(resolveCityId(parts[1].trim()));
+                    v.setDateOfBirth(LocalDate.parse(parts[2].trim()));
+                    v.setGender(Gender.valueOf(parts[3].trim().toUpperCase()));
+                    volunteers.add(v);
+                } catch (Exception e) {
+                    fail++;
+                    failedLines.add(lineNum);
+                }
+            }
+            if (!volunteers.isEmpty()) {
+                mapper.insertBatch(volunteers);
+                success = volunteers.size();
+            }
+            return new ImportResult(success, fail, failedLines);
         } catch (Exception e) {
             throw new RuntimeException("failed to import volunteers csv", e);
         }

@@ -16,4 +16,6 @@ public class RunnerUpdateRequest {
     private Integer cityId;
     @NotBlank
     private String experience;
+
+    private String photo;
 }

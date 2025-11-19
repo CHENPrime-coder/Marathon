@@ -2,6 +2,7 @@ package com.example.marathon.config;
 
 import com.example.marathon.security.AuthInterceptor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -29,5 +30,15 @@ public class WebConfig implements WebMvcConfigurer {
         String location = Path.of(uploadDir).toUri().toString();
         registry.addResourceHandler("/files/**")
                 .addResourceLocations(location);
+    }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")        // 对所有路径生效
+                .allowedOriginPatterns("*") // 允许所有源地址 (Spring Boot 2.4+ 推荐使用 Patterns 配合 Credentials)
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD") // 允许的请求方法
+                .allowCredentials(true)    // 允许携带 Cookie/凭证
+                .maxAge(3600)              // 预检请求的缓存时间（秒）
+                .allowedHeaders("*");      // 允许所有 Header
     }
 }

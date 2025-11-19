@@ -1,7 +1,7 @@
 package com.example.marathon.service;
 
 import com.example.marathon.mapper.CityMapper;
-import com.example.marathon.table.City;
+import com.example.marathon.dao.City;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

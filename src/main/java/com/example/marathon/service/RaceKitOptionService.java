@@ -1,7 +1,7 @@
 package com.example.marathon.service;
 
 import com.example.marathon.mapper.RaceKitOptionMapper;
-import com.example.marathon.table.RaceKitOption;
+import com.example.marathon.dao.RaceKitOption;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

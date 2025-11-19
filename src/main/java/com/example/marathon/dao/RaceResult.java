@@ -1,4 +1,4 @@
-package com.example.marathon.table;
+package com.example.marathon.dao;
 
 import lombok.Data;
 
@@ -9,4 +9,7 @@ public class RaceResult {
     private Integer completionTime;
     private Integer competitionId;
     private String runnerEmail;
+    private String runnerAvatar;
+    private String runnerCity;
+    private String runnerExperienceLevel;
 }

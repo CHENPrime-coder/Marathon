@@ -22,12 +22,12 @@ public class FileStorageService {
         }
     }
 
-    public String saveAvatar(String email, MultipartFile file) {
+    public String saveAvatar(String tag, MultipartFile file) {
         if (file == null || file.isEmpty()) {
             return null;
         }
         String ext = StringUtils.getFilenameExtension(file.getOriginalFilename());
-        String filename = email + "-" + UUID.randomUUID() + (ext != null ? "." + ext : "");
+        String filename = tag + "-" + UUID.randomUUID() + (ext != null ? "." + ext : "");
         Path target = baseDir.resolve(filename);
         try {
             file.transferTo(target);

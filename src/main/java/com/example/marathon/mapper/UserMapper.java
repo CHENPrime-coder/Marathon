@@ -1,6 +1,6 @@
 package com.example.marathon.mapper;
 
-import com.example.marathon.table.User;
+import com.example.marathon.dao.User;
 import org.apache.ibatis.annotations.*;
 
 @Mapper

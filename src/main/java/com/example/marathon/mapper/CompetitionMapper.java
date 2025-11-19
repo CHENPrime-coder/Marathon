@@ -1,6 +1,6 @@
 package com.example.marathon.mapper;
 
-import com.example.marathon.table.Competition;
+import com.example.marathon.dao.Competition;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;

@@ -117,6 +117,7 @@ CREATE TABLE `raceresult` (
 
 LOCK TABLES `raceresult` WRITE;
 /*!40000 ALTER TABLE `raceresult` DISABLE KEYS */;
+INSERT INTO `raceresult` VALUES (1,1,14500,1,'a.sama@keef.com'),(2,1,15200,1,'c.borgman@outlook.com'),(3,1,16000,1,'dianne.helton@ew.net');
 /*!40000 ALTER TABLE `raceresult` ENABLE KEYS */;
 UNLOCK TABLES;
 

@@ -7,8 +7,8 @@ import com.example.marathon.exception.BizException;
 import com.example.marathon.mapper.RoleMapper;
 import com.example.marathon.mapper.UserMapper;
 import com.example.marathon.security.TokenService;
-import com.example.marathon.table.Role;
-import com.example.marathon.table.User;
+import com.example.marathon.dao.Role;
+import com.example.marathon.dao.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

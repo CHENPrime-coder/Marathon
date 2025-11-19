@@ -13,6 +13,7 @@ import java.util.Optional;
 
 @Component
 public class TokenService {
+    // Tokens expire after 24 hours
     private static final long EXPIRE_MILLIS = 24 * 60 * 60 * 1000L;
     private static final String DEFAULT_SECRET = "ChangeMeToASecureSecretKeyForJwtToken123";
     private Key key;

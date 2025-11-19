@@ -1,13 +1,14 @@
 package com.example.marathon.service;
 
+import com.example.marathon.api.PageResponse;
 import com.example.marathon.dto.runner.RunnerCreateRequest;
 import com.example.marathon.dto.runner.RunnerUpdateRequest;
 import com.example.marathon.exception.BizException;
 import com.example.marathon.mapper.RunnerMapper;
 import com.example.marathon.mapper.UserMapper;
 import com.example.marathon.pojo.Gender;
-import com.example.marathon.table.Runner;
-import com.example.marathon.table.User;
+import com.example.marathon.dao.Runner;
+import com.example.marathon.dao.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,8 +33,15 @@ public class RunnerService {
         return runnerMapper.findByEmail(email);
     }
 
-    public List<Runner> query(Integer cityId, String gender, String keyword) {
-        return runnerMapper.query(cityId, gender, keyword);
+    public PageResponse<Runner> query(Integer cityId, String gender, String keyword,
+            int page, int size) {
+        if (page < 1) {
+            page = 1;
+        }
+        long offset = (long) (page - 1) * size;
+        long total = runnerMapper.count(cityId, gender, keyword);
+        List<Runner> list = runnerMapper.query(cityId, gender, keyword, offset, size);
+        return new PageResponse<>(total, list);
     }
 
     @Transactional
@@ -50,11 +58,11 @@ public class RunnerService {
         Runner runner = new Runner();
         runner.setEmail(request.getEmail());
         runner.setName(request.getName());
-        runner.setGender(Gender.valueOf(request.getGender()));
+        runner.setGender(Gender.valueOf(request.getGender().toUpperCase()));
         runner.setDateOfBirth(request.getDateOfBirth());
         runner.setCityId(request.getCityId());
         runner.setExperience(request.getExperience());
-        runner.setPhoto(null);
+        runner.setPhoto(request.getPhoto());
         runnerMapper.insert(runner);
     }
 
@@ -65,22 +73,17 @@ public class RunnerService {
             throw new BizException(404, "runner not found");
         }
         runner.setName(request.getName());
-        runner.setGender(Gender.valueOf(request.getGender()));
+        runner.setGender(Gender.valueOf(request.getGender().toUpperCase()));
         runner.setDateOfBirth(request.getDateOfBirth());
         runner.setCityId(request.getCityId());
         runner.setExperience(request.getExperience());
+        if (request.getPhoto() != null) {
+            runner.setPhoto(request.getPhoto());
+        }
         runnerMapper.update(runner);
     }
 
-    @Transactional
-    public String updateAvatar(String email, MultipartFile file) {
-        Runner runner = runnerMapper.findByEmail(email);
-        if (runner == null) {
-            throw new BizException(404, "runner not found");
-        }
-        String url = fileStorageService.saveAvatar(email, file);
-        runner.setPhoto(url);
-        runnerMapper.update(runner);
-        return url;
+    public String uploadAvatar(MultipartFile file) {
+        return fileStorageService.saveAvatar("avatar", file);
     }
 }
