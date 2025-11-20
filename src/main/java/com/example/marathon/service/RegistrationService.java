@@ -33,12 +33,12 @@ public class RegistrationService {
     public RegistrationResponse register(RegistrationRequest request) {
         Registration existing = registrationMapper.findOne(request.getEmail(), request.getCompetitionId());
         if (existing != null) {
-            throw new BizException(400, "already registered");
+            throw new BizException(400, "已注册");
         }
         Competition competition = competitionMapper.findById(request.getCompetitionId());
         RaceKitOption option = raceKitOptionMapper.findById(request.getOptionId());
         if (competition == null || option == null) {
-            throw new BizException(400, "competition or option not found");
+            throw new BizException(400, "竞赛或者工具包不存在");
         }
         BigDecimal total = competition.getRegCost().add(option.getCost());
         Registration registration = new Registration();

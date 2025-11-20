@@ -93,7 +93,7 @@ public class VolunteerService {
             }
             return new ImportResult(success, fail, failedLines);
         } catch (Exception e) {
-            throw new RuntimeException("failed to import volunteers csv", e);
+            throw new RuntimeException("导入失败", e);
         }
     }
 

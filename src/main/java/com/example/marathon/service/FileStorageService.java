@@ -32,7 +32,7 @@ public class FileStorageService {
         try {
             file.transferTo(target);
         } catch (IOException e) {
-            throw new RuntimeException("Failed to save file", e);
+            throw new RuntimeException("文件保存失败", e);
         }
         return "/files/" + filename;
     }

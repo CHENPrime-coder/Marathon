@@ -47,7 +47,7 @@ public class RunnerService {
     @Transactional
     public void createRunner(RunnerCreateRequest request) {
         if (userMapper.findByEmail(request.getEmail()) != null) {
-            throw new BizException(400, "user already exists");
+            throw new BizException(400, "用户已存在");
         }
         User user = new User();
         user.setEmail(request.getEmail());
@@ -70,7 +70,7 @@ public class RunnerService {
     public void updateRunner(String email, RunnerUpdateRequest request) {
         Runner runner = runnerMapper.findByEmail(email);
         if (runner == null) {
-            throw new BizException(404, "runner not found");
+            throw new BizException(404, "跑步者未找到");
         }
         runner.setName(request.getName());
         runner.setGender(Gender.valueOf(request.getGender().toUpperCase()));

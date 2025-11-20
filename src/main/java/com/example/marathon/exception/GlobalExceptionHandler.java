@@ -32,6 +32,6 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ApiResponse<Void> handleOther(Exception ex) {
         log.error("Unhandled exception", ex);
-        return ApiResponse.fail(500, "internal error");
+        return ApiResponse.fail(500, "内部服务器错误");
     }
 }

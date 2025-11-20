@@ -16,10 +16,4 @@ public interface CompetitionMapper {
     @Insert("insert into competition(Name, RegCost) values(#{name}, #{regCost})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     int insert(Competition competition);
-
-    @Update("update competition set Name=#{name}, RegCost=#{regCost} where Id=#{id}")
-    int update(Competition competition);
-
-    @Delete("delete from competition where Id=#{id}")
-    int delete(Integer id);
 }

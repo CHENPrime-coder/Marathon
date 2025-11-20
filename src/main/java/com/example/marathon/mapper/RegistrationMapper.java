@@ -14,9 +14,6 @@ public interface RegistrationMapper {
     @Insert("insert into registration(Email, OptionId, CompetitionId, TotalPrice) values(#{email}, #{optionId}, #{competitionId}, #{totalPrice})")
     int insert(Registration registration);
 
-    @Update("update registration set OptionId=#{optionId}, TotalPrice=#{totalPrice} where Email=#{email} and CompetitionId=#{competitionId}")
-    int update(Registration registration);
-
     @Select("""
             <script>
             select Email as email, OptionId as optionId, CompetitionId as competitionId, TotalPrice as totalPrice

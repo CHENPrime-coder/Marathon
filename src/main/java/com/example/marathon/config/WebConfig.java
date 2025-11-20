@@ -35,7 +35,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")        // 对所有路径生效
-                .allowedOriginPatterns("*") // 允许所有源地址 (Spring Boot 2.4+ 推荐使用 Patterns 配合 Credentials)
+                .allowedOriginPatterns("*") // 允许所有源地址
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD") // 允许的请求方法
                 .allowCredentials(true)    // 允许携带 Cookie/凭证
                 .maxAge(3600)              // 预检请求的缓存时间（秒）

@@ -29,30 +29,28 @@ public class AuthService {
 
     public LoginResponse login(LoginRequest request) {
         if (!captchaService.validate(request.getCaptchaId(), request.getCaptchaCode())) {
-            throw new BizException(400, "captcha invalid");
+            throw new BizException(400, "验证码错误");
         }
         User user = userMapper.findByEmail(request.getEmail());
         if (user == null) {
-            throw new BizException(400, "user not found");
+            throw new BizException(400, "未找到用户");
         }
         if (!user.getPassword().equals(request.getPassword())) {
-            throw new BizException(400, "password incorrect");
+            throw new BizException(400, "密码错误");
         }
         Role role = roleMapper.findById(user.getRoleId());
         String token = tokenService.generateToken(user.getEmail());
-        return new LoginResponse(token, user.getEmail(),
-                role == null ? null : role.getRoleId(),
-                role == null ? null : role.getRoleName());
+        return new LoginResponse(token, user.getEmail(), role.getRoleId(), role.getRoleName());
     }
 
     @Transactional
     public void updatePassword(String email, UpdatePasswordRequest request) {
         User user = userMapper.findByEmail(email);
         if (user == null) {
-            throw new BizException(400, "user not found");
+            throw new BizException(400, "用户不存在");
         }
         if (!user.getPassword().equals(request.getOldPassword())) {
-            throw new BizException(400, "old password incorrect");
+            throw new BizException(400, "旧密码错误");
         }
         userMapper.updatePassword(email, request.getNewPassword());
     }
