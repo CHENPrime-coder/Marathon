@@ -19,7 +19,6 @@ public class CaptchaController {
 
     @GetMapping
     public ApiResponse<CaptchaResponse> create() {
-        var captcha = captchaService.generate();
-        return ApiResponse.success(new CaptchaResponse(captcha.id(), captcha.imageBase64(), captcha.expiresInSeconds()));
+        return ApiResponse.success(captchaService.generate());
     }
 }

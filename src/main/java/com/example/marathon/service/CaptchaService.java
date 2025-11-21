@@ -1,9 +1,11 @@
 package com.example.marathon.service;
 
+import com.example.marathon.dto.captcha.CaptchaResponse;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.google.code.kaptcha.util.Config;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.awt.image.BufferedImage;
@@ -16,6 +18,7 @@ import java.util.UUID;
 import jakarta.annotation.PostConstruct;
 import javax.imageio.ImageIO;
 
+@Slf4j
 @Service
 public class CaptchaService {
 
@@ -39,14 +42,16 @@ public class CaptchaService {
         kaptcha.setConfig(config);
     }
 
-    public Captcha generate() {
+    public CaptchaResponse generate() {
         String text = kaptcha.createText();
         BufferedImage image = kaptcha.createImage(text);
         String id = UUID.randomUUID().toString();
         // 忽略大小写
         cache.put(id, text.toLowerCase());
+        log.info("Captcha generated: {}", id);
+        log.info("Captcha text: {}", text);
         String base64 = encode(image);
-        return new Captcha(id, base64, 120);
+        return new CaptchaResponse(id, base64, 120);
     }
 
     public boolean validate(String id, String code) {
@@ -71,8 +76,5 @@ public class CaptchaService {
         } catch (Exception e) {
             throw new RuntimeException("captcha encode error", e);
         }
-    }
-
-    public record Captcha(String id, String imageBase64, int expiresInSeconds) {
     }
 }
