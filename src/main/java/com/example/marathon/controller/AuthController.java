@@ -15,11 +15,9 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
-    private final TokenService tokenService;
 
-    public AuthController(AuthService authService, TokenService tokenService) {
+    public AuthController(AuthService authService) {
         this.authService = authService;
-        this.tokenService = tokenService;
     }
 
     @PostMapping("/login")

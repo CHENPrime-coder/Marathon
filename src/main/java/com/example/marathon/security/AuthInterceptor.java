@@ -35,7 +35,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         String method = request.getMethod();
 
         // 放行白名单和预检请求(CORS)
-        if (WHITE_LIST.contains(path) || method.equalsIgnoreCase("OPTIONS")) {
+        if (WHITE_LIST.contains(path) || path.startsWith("/files/") || method.equalsIgnoreCase("OPTIONS")) {
             return true;
         }
 

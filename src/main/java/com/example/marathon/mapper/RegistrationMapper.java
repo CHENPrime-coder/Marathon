@@ -13,19 +13,4 @@ public interface RegistrationMapper {
 
     @Insert("insert into registration(Email, OptionId, CompetitionId, TotalPrice) values(#{email}, #{optionId}, #{competitionId}, #{totalPrice})")
     int insert(Registration registration);
-
-    @Select("""
-            <script>
-            select Email as email, OptionId as optionId, CompetitionId as competitionId, TotalPrice as totalPrice
-            from registration
-            <where>
-            <if test="email!=null">Email=#{email}</if>
-            <if test="competitionId!=null">
-                <if test="email!=null">and</if>
-                CompetitionId=#{competitionId}
-            </if>
-            </where>
-            </script>
-            """)
-    List<Registration> query(@Param("email") String email, @Param("competitionId") Integer competitionId);
 }

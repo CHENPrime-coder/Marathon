@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @Service
 public class RegistrationService {
@@ -30,8 +29,8 @@ public class RegistrationService {
     }
 
     @Transactional
-    public RegistrationResponse register(RegistrationRequest request) {
-        Registration existing = registrationMapper.findOne(request.getEmail(), request.getCompetitionId());
+    public RegistrationResponse register(RegistrationRequest request, String email) {
+        Registration existing = registrationMapper.findOne(email, request.getCompetitionId());
         if (existing != null) {
             throw new BizException(400, "已注册");
         }
@@ -42,15 +41,11 @@ public class RegistrationService {
         }
         BigDecimal total = competition.getRegCost().add(option.getCost());
         Registration registration = new Registration();
-        registration.setEmail(request.getEmail());
+        registration.setEmail(email);
         registration.setCompetitionId(request.getCompetitionId());
         registration.setOptionId(request.getOptionId());
         registration.setTotalPrice(total);
         registrationMapper.insert(registration);
         return new RegistrationResponse(total);
-    }
-
-    public List<Registration> query(String email, Integer competitionId) {
-        return registrationMapper.query(email, competitionId);
     }
 }

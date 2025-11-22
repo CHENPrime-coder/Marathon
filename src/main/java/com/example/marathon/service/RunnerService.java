@@ -1,17 +1,21 @@
 package com.example.marathon.service;
 
 import com.example.marathon.api.PageResponse;
+import com.example.marathon.dao.City;
 import com.example.marathon.dto.runner.RunnerCreateRequest;
+import com.example.marathon.dto.runner.RunnerDetails;
+import com.example.marathon.dto.runner.RunnerResponse;
 import com.example.marathon.dto.runner.RunnerUpdateRequest;
 import com.example.marathon.exception.BizException;
+import com.example.marathon.mapper.CityMapper;
 import com.example.marathon.mapper.RunnerMapper;
 import com.example.marathon.mapper.UserMapper;
 import com.example.marathon.pojo.Gender;
 import com.example.marathon.dao.Runner;
 import com.example.marathon.dao.User;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -21,26 +25,41 @@ public class RunnerService {
 
     private final RunnerMapper runnerMapper;
     private final UserMapper userMapper;
-    private final FileStorageService fileStorageService;
+    private final CityMapper cityMapper;
 
-    public RunnerService(RunnerMapper runnerMapper, UserMapper userMapper, FileStorageService fileStorageService) {
+    public RunnerService(RunnerMapper runnerMapper, UserMapper userMapper, CityMapper cityMapper) {
         this.runnerMapper = runnerMapper;
         this.userMapper = userMapper;
-        this.fileStorageService = fileStorageService;
+        this.cityMapper = cityMapper;
     }
 
     public Runner getByEmail(String email) {
         return runnerMapper.findByEmail(email);
     }
 
-    public PageResponse<Runner> query(Integer cityId, String gender, String keyword,
-            int page, int size) {
+    public RunnerDetails getDetailsByEmail(String email) {
+        Runner runner = runnerMapper.findByEmail(email);
+        if (runner == null) {
+            throw new BizException(404, "跑步者未找到");
+        }
+        City city = cityMapper.findById(runner.getCityId());
+        if (city == null) {
+            throw new BizException(404, "城市未找到");
+        }
+        RunnerDetails runnerDetails = new RunnerDetails();
+        BeanUtils.copyProperties(runner, runnerDetails);
+        runnerDetails.setCityName(city.getCityName());
+        return runnerDetails;
+    }
+
+    public PageResponse<RunnerResponse> query(Integer cityId, String gender, String keyword,
+                                              int page, int size) {
         if (page < 1) {
             page = 1;
         }
         long offset = (long) (page - 1) * size;
         long total = runnerMapper.count(cityId, gender, keyword);
-        List<Runner> list = runnerMapper.query(cityId, gender, keyword, offset, size);
+        List<RunnerResponse> list = runnerMapper.query(cityId, gender, keyword, offset, size);
         return new PageResponse<>(total, list);
     }
 
@@ -72,18 +91,7 @@ public class RunnerService {
         if (runner == null) {
             throw new BizException(404, "跑步者未找到");
         }
-        runner.setName(request.getName());
-        runner.setGender(Gender.valueOf(request.getGender().toUpperCase()));
-        runner.setDateOfBirth(request.getDateOfBirth());
-        runner.setCityId(request.getCityId());
-        runner.setExperience(request.getExperience());
-        if (request.getPhoto() != null) {
-            runner.setPhoto(request.getPhoto());
-        }
+        BeanUtils.copyProperties(request, runner);
         runnerMapper.update(runner);
-    }
-
-    public String uploadAvatar(MultipartFile file) {
-        return fileStorageService.saveAvatar("avatar", file);
     }
 }

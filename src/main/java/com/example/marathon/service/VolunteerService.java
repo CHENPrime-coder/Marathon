@@ -3,6 +3,7 @@ package com.example.marathon.service;
 import com.example.marathon.api.PageResponse;
 import com.example.marathon.dto.common.ImportResult;
 import com.example.marathon.dto.volunteer.VolunteerRequest;
+import com.example.marathon.dto.volunteer.VolunteerResponse;
 import com.example.marathon.mapper.CityMapper;
 import com.example.marathon.mapper.VolunteerMapper;
 import com.example.marathon.pojo.Gender;
@@ -29,14 +30,14 @@ public class VolunteerService {
         this.cityMapper = cityMapper;
     }
 
-    public PageResponse<Volunteer> query(Integer cityId, String gender, String keyword,
+    public PageResponse<VolunteerResponse> query(Integer cityId, String gender, String keyword,
             int page, int size) {
         if (page < 1) {
             page = 1;
         }
         long offset = (long) (page - 1) * size;
         long total = mapper.count(cityId, gender, keyword);
-        List<Volunteer> list = mapper.query(cityId, gender, keyword, offset, size);
+        List<VolunteerResponse> list = mapper.query(cityId, gender, keyword, offset, size);
         return new PageResponse<>(total, list);
     }
 

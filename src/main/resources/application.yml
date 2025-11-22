@@ -5,7 +5,12 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/Marathon
     username: root
-    password: sa2025
+    password: 123456
+  mvc:
+    static-path-pattern: /files/**
+  web:
+    resources:
+      static-locations: file:uploads/
 logging:
   level:
     com.example.marathon.mapper: debug

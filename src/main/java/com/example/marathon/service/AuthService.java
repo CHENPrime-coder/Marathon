@@ -40,7 +40,7 @@ public class AuthService {
         }
         Role role = roleMapper.findById(user.getRoleId());
         String token = tokenService.generateToken(user.getEmail());
-        return new LoginResponse(user.getEmail(), role.getRoleId(), role.getRoleName());
+        return new LoginResponse(token, user.getEmail(), role.getRoleId(), role.getRoleName());
     }
 
     @Transactional

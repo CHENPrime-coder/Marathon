@@ -13,4 +13,7 @@ public interface CityMapper {
 
     @Select("select CityId from city where lower(CityName)=lower(#{name}) limit 1")
     Integer findIdByName(String name);
+
+    @Select("select CityId as cityId, CityName as cityName from city where CityId=#{cityId}")
+    City findById(Integer cityId);
 }

@@ -9,6 +9,7 @@ public interface UserMapper {
     @Select("select Email as email, Password as password, RoleId as roleId from user where Email=#{email}")
     User findByEmail(String email);
 
+    // 创建用户
     @Insert("insert into user(Email, Password, RoleId) values(#{email}, #{password}, #{roleId})")
     int insert(User user);
 

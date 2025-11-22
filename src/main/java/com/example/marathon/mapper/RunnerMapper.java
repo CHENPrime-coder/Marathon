@@ -1,6 +1,7 @@
 package com.example.marathon.mapper;
 
 import com.example.marathon.dao.Runner;
+import com.example.marathon.dto.runner.RunnerResponse;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -11,6 +12,7 @@ public interface RunnerMapper {
     @Select("select Email as email, Name as name, upper(Gender) as gender, DateOfBirth as dateOfBirth, CityId as cityId, Experience as experience, Photo as photo from runner where Email=#{email}")
     Runner findByEmail(String email);
 
+    // Runner 创建
     @Insert("insert into runner(Email, Name, Gender, DateOfBirth, CityId, Experience, Photo) values(#{email}, #{name}, #{gender}, #{dateOfBirth}, #{cityId}, #{experience}, #{photo})")
     int insert(Runner runner);
 
@@ -40,10 +42,11 @@ public interface RunnerMapper {
 
     @Select("""
             <script>
-            select Email as email, Name as name, upper(Gender) as gender, DateOfBirth as dateOfBirth, CityId as cityId, Experience as experience, Photo as photo
-            from runner
+            select Email as email, Name as name, upper(Gender) as gender, DateOfBirth as dateOfBirth, r.CityId as cityId, Experience as experience, Photo as photo, c.CityName as cityName
+            from runner r 
+            inner join city c on r.CityId=c.CityId
             <where>
-                <if test="cityId!=null">CityId=#{cityId}</if>
+                <if test="cityId!=null">c.CityId=#{cityId}</if>
                 <if test="gender!=null and gender!=''">
                     <if test="cityId!=null">and</if>
                     Gender=#{gender}
@@ -57,9 +60,9 @@ public interface RunnerMapper {
             limit #{offset}, #{limit}
             </script>
             """)
-    List<Runner> query(@Param("cityId") Integer cityId,
-            @Param("gender") String gender,
-            @Param("keyword") String keyword,
-            @Param("offset") long offset,
-            @Param("limit") int limit);
+    List<RunnerResponse> query(@Param("cityId") Integer cityId,
+                               @Param("gender") String gender,
+                               @Param("keyword") String keyword,
+                               @Param("offset") long offset,
+                               @Param("limit") int limit);
 }

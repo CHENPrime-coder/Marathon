@@ -4,6 +4,7 @@ import com.example.marathon.api.ApiResponse;
 import com.example.marathon.api.PageResponse;
 import com.example.marathon.dto.common.ImportResult;
 import com.example.marathon.dto.volunteer.VolunteerRequest;
+import com.example.marathon.dto.volunteer.VolunteerResponse;
 import com.example.marathon.service.VolunteerService;
 import com.example.marathon.dao.Volunteer;
 import jakarta.validation.Valid;
@@ -27,7 +28,7 @@ public class VolunteerController {
     }
 
     @GetMapping
-    public ApiResponse<PageResponse<Volunteer>> query(
+    public ApiResponse<PageResponse<VolunteerResponse>> query(
             @RequestParam(required = false) Integer cityId,
             @RequestParam(required = false) String gender,
             @RequestParam(required = false) String keyword,

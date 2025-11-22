@@ -3,6 +3,8 @@ package com.example.marathon.controller;
 import com.example.marathon.api.ApiResponse;
 import com.example.marathon.api.PageResponse;
 import com.example.marathon.dto.runner.RunnerCreateRequest;
+import com.example.marathon.dto.runner.RunnerDetails;
+import com.example.marathon.dto.runner.RunnerResponse;
 import com.example.marathon.dto.runner.RunnerUpdateRequest;
 import com.example.marathon.security.AuthContext;
 import com.example.marathon.service.RunnerService;
@@ -36,24 +38,18 @@ public class RunnerController {
     }
 
     @GetMapping("/{email}")
-    public ApiResponse<Runner> get(@PathVariable String email) {
-        return ApiResponse.success(runnerService.getByEmail(email));
+    public ApiResponse<RunnerDetails> get(@PathVariable String email) {
+        return ApiResponse.success(runnerService.getDetailsByEmail(email));
     }
 
-    @PutMapping("/{email}")
-    public ApiResponse<Void> update(@PathVariable String email, @RequestBody @Valid RunnerUpdateRequest request) {
-        runnerService.updateRunner(email, request);
+    @PutMapping("/update")
+    public ApiResponse<Void> update(@RequestBody @Valid RunnerUpdateRequest request) {
+        runnerService.updateRunner(AuthContext.getEmail(), request);
         return ApiResponse.success();
     }
 
-    @PostMapping("/upload")
-    public ApiResponse<String> upload(@RequestPart("file") MultipartFile file) {
-        String url = runnerService.uploadAvatar(file);
-        return ApiResponse.success(url);
-    }
-
     @GetMapping
-    public ApiResponse<PageResponse<Runner>> listAll(
+    public ApiResponse<PageResponse<RunnerResponse>> listAll(
             @RequestParam(required = false) Integer cityId,
             @RequestParam(required = false) String gender,
             @RequestParam(required = false) String keyword,

@@ -12,8 +12,4 @@ public interface CompetitionMapper {
 
     @Select("select Id as id, Name as name, RegCost as regCost from competition where Id=#{id}")
     Competition findById(Integer id);
-
-    @Insert("insert into competition(Name, RegCost) values(#{name}, #{regCost})")
-    @Options(useGeneratedKeys = true, keyProperty = "id")
-    int insert(Competition competition);
 }

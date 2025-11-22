@@ -1,6 +1,7 @@
 package com.example.marathon.mapper;
 
 import com.example.marathon.dao.Volunteer;
+import com.example.marathon.dto.volunteer.VolunteerResponse;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -35,8 +36,9 @@ public interface VolunteerMapper {
 
     @Select("""
             <script>
-            select Id as id, Name as name, CityId as cityId, DateOfBirth as dateOfBirth, upper(Gender) as gender
-            from volunteer
+            select Id as id, Name as name, v.CityId as cityId, DateOfBirth as dateOfBirth, upper(Gender) as gender, c.CityName as cityName
+            from volunteer v 
+            inner join city c on c.CityId = v.CityId
             <where>
                 <if test="cityId!=null">CityId=#{cityId}</if>
                 <if test="gender!=null and gender!=''">
@@ -52,11 +54,11 @@ public interface VolunteerMapper {
             limit #{offset}, #{limit}
             </script>
             """)
-    List<Volunteer> query(@Param("cityId") Integer cityId,
-            @Param("gender") String gender,
-            @Param("keyword") String keyword,
-            @Param("offset") long offset,
-            @Param("limit") int limit);
+    List<VolunteerResponse> query(@Param("cityId") Integer cityId,
+                                  @Param("gender") String gender,
+                                  @Param("keyword") String keyword,
+                                  @Param("offset") long offset,
+                                  @Param("limit") int limit);
 
     @Insert("""
             <script>

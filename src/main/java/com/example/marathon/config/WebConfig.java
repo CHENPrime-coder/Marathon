@@ -14,7 +14,6 @@ import java.nio.file.Paths;
 public class WebConfig implements WebMvcConfigurer {
 
     private final AuthInterceptor authInterceptor;
-    private final String uploadDir = Paths.get("uploads").toAbsolutePath().toString();
 
     public WebConfig(AuthInterceptor authInterceptor) {
         this.authInterceptor = authInterceptor;
@@ -23,13 +22,6 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authInterceptor);
-    }
-
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        String location = Path.of(uploadDir).toUri().toString();
-        registry.addResourceHandler("/files/**")
-                .addResourceLocations(location);
     }
 
     @Override
