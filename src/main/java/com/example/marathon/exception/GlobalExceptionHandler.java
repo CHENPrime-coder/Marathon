@@ -15,6 +15,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BizException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiResponse<Void> handleBiz(BizException ex) {
+        log.error("Biz Exception", ex);
         return ApiResponse.fail(ex.getCode(), ex.getMessage());
     }
 
@@ -25,6 +26,7 @@ public class GlobalExceptionHandler {
                 .findFirst()
                 .map(err -> err.getField() + " " + err.getDefaultMessage())
                 .orElse(ex.getMessage());
+        log.error("Method Argument Not Valid", ex);
         return ApiResponse.fail(400, message);
     }
 
