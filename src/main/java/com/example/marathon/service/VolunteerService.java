@@ -94,7 +94,7 @@ public class VolunteerService {
             }
             return new ImportResult(success, fail, failedLines);
         } catch (Exception e) {
-            throw new RuntimeException("导入失败", e);
+            throw new IllegalArgumentException("导入失败", e);
         }
     }
 
