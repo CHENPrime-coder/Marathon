@@ -26,11 +26,16 @@ public class RunnerService {
     private final RunnerMapper runnerMapper;
     private final UserMapper userMapper;
     private final CityMapper cityMapper;
+    private final ExperienceService experienceService;
+    private final GenderService genderService;
 
-    public RunnerService(RunnerMapper runnerMapper, UserMapper userMapper, CityMapper cityMapper) {
+    public RunnerService(RunnerMapper runnerMapper, UserMapper userMapper, CityMapper cityMapper,
+                         ExperienceService experienceService, GenderService genderService) {
         this.runnerMapper = runnerMapper;
         this.userMapper = userMapper;
         this.cityMapper = cityMapper;
+        this.experienceService = experienceService;
+        this.genderService = genderService;
     }
 
     public Runner getByEmail(String email) {
@@ -60,6 +65,12 @@ public class RunnerService {
         long offset = (long) (page - 1) * size;
         long total = runnerMapper.count(cityId, gender, keyword);
         List<RunnerResponse> list = runnerMapper.query(cityId, gender, keyword, offset, size);
+        for (RunnerResponse runnerResponse : list) {
+            String experienceLabel = experienceService.getExperienceLabel(runnerResponse.getExperience());
+            runnerResponse.setExperience(experienceLabel);
+            String genderLabel = genderService.getGenderLabel(runnerResponse.getGender());
+            runnerResponse.setGender(genderLabel);
+        }
         return new PageResponse<>(total, list);
     }
 
@@ -92,6 +103,7 @@ public class RunnerService {
             throw new BizException(404, "跑步者未找到");
         }
         BeanUtils.copyProperties(request, runner);
+        runner.setGender(Gender.valueOf(request.getGender().toUpperCase()));
         runnerMapper.update(runner);
     }
 }

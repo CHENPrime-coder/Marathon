@@ -8,8 +8,11 @@ public class RaceResult {
     private Integer status;
     private Integer completionTime;
     private Integer competitionId;
+    private String competitionName;
     private String runnerEmail;
+    private String runnerGender;
     private String runnerAvatar;
     private String runnerCity;
     private String runnerExperienceLevel;
+    private String runnerName;
 }

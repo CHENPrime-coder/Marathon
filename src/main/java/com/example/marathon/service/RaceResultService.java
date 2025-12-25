@@ -12,9 +12,13 @@ import java.util.stream.Collectors;
 @Service
 public class RaceResultService {
     private final RaceResultMapper mapper;
+    private final ExperienceService experienceService;
+    private final GenderService genderService;
 
-    public RaceResultService(RaceResultMapper mapper) {
+    public RaceResultService(RaceResultMapper mapper, ExperienceService experienceService, GenderService genderService) {
         this.mapper = mapper;
+        this.experienceService = experienceService;
+        this.genderService = genderService;
     }
 
     public List<RaceResultResponse> query(Integer competitionId, String gender) {
@@ -29,7 +33,11 @@ public class RaceResultService {
                         r.getRunnerEmail(),
                         r.getRunnerAvatar(),
                         r.getRunnerCity(),
-                        r.getRunnerExperienceLevel()))
+                        experienceService.getExperienceLabel(r.getRunnerExperienceLevel()),
+                        r.getCompetitionName(),
+                        genderService.getGenderLabel(r.getRunnerGender()),
+                        r.getRunnerName()
+                ))
                 .collect(Collectors.toList());
     }
 
@@ -47,6 +55,10 @@ public class RaceResultService {
                 r.getRunnerEmail(),
                 r.getRunnerAvatar(),
                 r.getRunnerCity(),
-                r.getRunnerExperienceLevel());
+                experienceService.getExperienceLabel(r.getRunnerExperienceLevel()),
+                r.getCompetitionName(),
+                genderService.getGenderLabel(r.getRunnerGender()),
+                r.getRunnerName()
+        );
     }
 }

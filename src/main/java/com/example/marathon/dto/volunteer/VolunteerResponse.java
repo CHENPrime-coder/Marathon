@@ -11,6 +11,6 @@ public class VolunteerResponse {
     private String name;
     private Integer cityId;
     private LocalDate dateOfBirth;
-    private Gender gender;
+    private String gender;
     private String cityName;
 }

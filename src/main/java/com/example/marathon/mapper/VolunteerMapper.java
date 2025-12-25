@@ -40,7 +40,7 @@ public interface VolunteerMapper {
             from volunteer v 
             inner join city c on c.CityId = v.CityId
             <where>
-                <if test="cityId!=null">CityId=#{cityId}</if>
+                <if test="cityId!=null">v.CityId=#{cityId}</if>
                 <if test="gender!=null and gender!=''">
                     <if test="cityId!=null">and</if>
                     Gender=#{gender}

@@ -15,4 +15,7 @@ public class RaceResultResponse {
     private String runnerAvatar;
     private String runnerCity;
     private String runnerExperienceLevel;
+    private String competitionName;
+    private String runnerGender;
+    private String runnerName;
 }

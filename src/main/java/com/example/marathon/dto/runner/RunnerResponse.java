@@ -9,7 +9,7 @@ import java.time.LocalDate;
 public class RunnerResponse {
     private String email;
     private String name;
-    private Gender gender;
+    private String gender;
     private LocalDate dateOfBirth;
     private Integer cityId;
     private String experience;

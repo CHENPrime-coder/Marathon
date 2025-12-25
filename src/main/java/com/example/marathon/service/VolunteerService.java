@@ -24,10 +24,12 @@ public class VolunteerService {
 
     private final VolunteerMapper mapper;
     private final CityMapper cityMapper;
+    private final GenderService genderService;
 
-    public VolunteerService(VolunteerMapper mapper, CityMapper cityMapper) {
+    public VolunteerService(VolunteerMapper mapper, CityMapper cityMapper, GenderService genderService) {
         this.mapper = mapper;
         this.cityMapper = cityMapper;
+        this.genderService = genderService;
     }
 
     public PageResponse<VolunteerResponse> query(Integer cityId, String gender, String keyword,
@@ -38,6 +40,10 @@ public class VolunteerService {
         long offset = (long) (page - 1) * size;
         long total = mapper.count(cityId, gender, keyword);
         List<VolunteerResponse> list = mapper.query(cityId, gender, keyword, offset, size);
+        for (VolunteerResponse volunteerResponse : list) {
+            String genderName = genderService.getGenderLabel(volunteerResponse.getGender());
+            volunteerResponse.setGender(genderName);
+        }
         return new PageResponse<>(total, list);
     }
 
@@ -81,7 +87,8 @@ public class VolunteerService {
                     v.setName(parts[0].trim());
                     v.setCityId(resolveCityId(parts[1].trim()));
                     v.setDateOfBirth(LocalDate.parse(parts[2].trim()));
-                    v.setGender(Gender.valueOf(parts[3].trim().toUpperCase()));
+                    Gender gender = genderService.getGender(parts[3].trim());
+                    v.setGender(gender);
                     volunteers.add(v);
                 } catch (Exception e) {
                     fail++;

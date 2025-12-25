@@ -28,8 +28,8 @@ public class CommonController {
     public ApiResponse<List<Map<String, String>>> getGenders() {
         // Static list of genders
         List<Map<String, String>> levels = Arrays.asList(
-                Map.of("label", "Male", "value", "Male"),
-                Map.of("label", "Female", "value", "Female"));
+                Map.of("label", "男性", "value", "Male"),
+                Map.of("label", "女性", "value", "Female"));
         return ApiResponse.success(levels);
     }
 
@@ -37,10 +37,9 @@ public class CommonController {
     public ApiResponse<List<Map<String, String>>> getExperienceLevels() {
         // Static list of experience levels
         List<Map<String, String>> levels = Arrays.asList(
-                Map.of("label", "初次尝试", "value", "初次尝试"),
-                Map.of("label", "中等", "value", "中等"),
-                Map.of("label", "高级", "value", "高级"),
-                Map.of("label", "专业", "value", "专业"));
+                Map.of("label", "初次尝试", "value", "First time"),
+                Map.of("label", "有一些经验", "value", "Have some experience"),
+                Map.of("label", "经验丰富的", "value", "Experienced"));
         return ApiResponse.success(levels);
     }
 
